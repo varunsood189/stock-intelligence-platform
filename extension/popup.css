@@ -1,0 +1,127 @@
+body {
+  font-family: Arial, sans-serif;
+  width: 420px;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0 0 10px;
+}
+
+h2 {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  margin: 8px 0 4px;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+}
+
+button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.section {
+  margin-top: 12px;
+}
+
+pre {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 8px;
+  height: 180px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+body {
+  margin: 0;
+  min-width: 340px;
+  font-family: Arial, sans-serif;
+}
+
+main {
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+h1 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+input,
+select,
+button {
+  border: 1px solid #c7c7c7;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+button {
+  border: none;
+  color: #fff;
+  background: #1f6feb;
+  cursor: pointer;
+}
+
+#fetchFromPageButton {
+  background: #0d8a4b;
+}
+
+#runResearchButton {
+  background: #8a4b0d;
+}
+
+#status {
+  min-height: 18px;
+  color: #555;
+  font-size: 12px;
+}
+
+.forecast-card {
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 6px 0;
+}
+
+.hint {
+  color: #666;
+  font-size: 12px;
+}
+
+.diagnostic-box {
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 8px;
+  background: #fafafa;
+  margin: 6px 0;
+}
+
+#trace {
+  border-top: 1px solid #ddd;
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.trace-item {
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+  padding: 6px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  white-space: pre-wrap;
+}

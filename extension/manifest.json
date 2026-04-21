@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Stock News-Price Research Agent",
+  "version": "1.0.0",
+  "description": "Multi-step stock news research with tool trace.",
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "sidePanel"],
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*",
+    "https://news.google.com/*",
+    "https://query1.finance.yahoo.com/*",
+    "https://query2.finance.yahoo.com/*",
+    "http://127.0.0.1:8788/*",
+    "https://www.moneycontrol.com/*",
+    "https://moneycontrol.com/*",
+    "https://finance.yahoo.com/*",
+    "https://www.google.com/finance/*",
+    "https://query1.finance.yahoo.com/v1/finance/search*",
+    "https://nse-api-ruby.vercel.app/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Stock Research Agent"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}

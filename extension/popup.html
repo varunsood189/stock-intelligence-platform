@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Stock Research Agent</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <h1>Stock Research Agent</h1>
+
+    <label>Company</label>
+    <input id="company" type="text" value="Ola" />
+
+    <label>Ticker</label>
+    <input id="ticker" type="text" value="OLAELEC.NS" />
+
+    <button id="fetchFromPageBtn" type="button">Get Stock From Website</button>
+    <button id="runBtn">Run Multi-step Research</button>
+    <button id="testYahooBtn" type="button">Test Direct Yahoo</button>
+    <button id="copyTraceBtn" type="button">Copy Trace</button>
+
+    <div class="section">
+      <h2>Reasoning Chain + Tool Trace</h2>
+      <pre id="trace"></pre>
+    </div>
+
+    <div class="section">
+      <h2>Final Result</h2>
+      <pre id="final"></pre>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="popup_clean.js"></script>
+  </body>
+</html>
