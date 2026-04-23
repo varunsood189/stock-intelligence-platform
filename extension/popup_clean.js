@@ -135,26 +135,7 @@ async function fetchDirectYahooPrices(ticker, fromDate, toDate) {
 }
 
 async function toolGetStockPrices(ticker, fromDate, toDate) {
-  // Best-effort local proxy (most reliable for Yahoo data).
-  try {
-    const localUrl = `http://127.0.0.1:8788/price?ticker=${encodeURIComponent(
-      ticker
-    )}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}`;
-    const localRes = await fetch(localUrl);
-    if (localRes.ok) {
-      const localJson = await localRes.json();
-      if (Array.isArray(localJson.prices)) {
-        return {
-          ticker: localJson.ticker || ticker,
-          totalDays: localJson.totalDays || localJson.prices.length,
-          prices: localJson.prices,
-          source: localJson.source || "local_proxy"
-        };
-      }
-    }
-  } catch (e) {
-    // Fallback to direct Yahoo requests below.
-  }
+  // Direct market data path only (no local proxy dependency).
   return fetchDirectYahooPrices(ticker, fromDate, toDate);
 }
 
@@ -394,20 +375,6 @@ async function resolveBestTicker(queryText) {
     }
   } catch (e) {
     // fallback chain continues
-  }
-
-  // First try local proxy resolver (avoids browser-origin limits).
-  try {
-    const localUrl = `http://127.0.0.1:8788/resolve_ticker?query=${encodeURIComponent(q)}`;
-    const localRes = await fetch(localUrl);
-    if (localRes.ok) {
-      const localJson = await localRes.json();
-      if (localJson?.best?.symbol) {
-        return { ...localJson.best, resolver: "local_proxy" };
-      }
-    }
-  } catch (e) {
-    // Fallback to direct Yahoo search below.
   }
 
   try {

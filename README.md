@@ -21,11 +21,11 @@ It is built for assignment-style agent workflows with visible traceability.
 - Tool execution + trace rendering
 - Website-based company/ticker auto-detection
 
-### B) Local Proxy Service (`price_proxy.py`)
+### B) Direct Market Data (Extension Runtime)
 
-- Local HTTP service at `http://127.0.0.1:8788`
-- Reliable stock price fetch via `yfinance`
-- Ticker resolver endpoint with fuzzy search
+- Direct Yahoo chart/search API access from extension
+- NSE/BSE resolver endpoint with fuzzy ranking
+- No local proxy dependency
 
 ### C) Config Bootstrap (`scripts/set_gemini_key.sh`)
 
@@ -57,11 +57,11 @@ It is built for assignment-style agent workflows with visible traceability.
                 │
                 │ (tool orchestration + history)
                 ▼
-     ┌────────────────────────────────────────────────────────────┐
-     │ Local Proxy: price_proxy.py                               │
-     │ /resolve_ticker  -> NSE/BSE API + Yahoo fallback + fuzzy  │
-     │ /price           -> yfinance OHLC fetch + ticker fallback │
-     └────────────────────────────────────────────────────────────┘
+    ┌────────────────────────────────────────────────────────────┐
+    │ Direct Data Path in popup_clean.js                        │
+    │ get_stock_prices -> Yahoo chart APIs                      │
+    │ resolve_ticker   -> NSE/BSE API + Yahoo fallback + fuzzy  │
+    └────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -76,8 +76,7 @@ User clicks "Run Multi-step Research"
         ├─► Query1 + Query2 planned by Gemini (parallel)
         │      ├─► Tool: get_news(company, from, to)
         │      └─► Tool: get_stock_prices(ticker, from, to)
-        │             ├─► local /price (preferred)
-        │             └─► direct Yahoo fallback
+        │             └─► direct Yahoo chart API
         │
         ├─► Query3 planned by Gemini
         │      └─► Tool: link_news_price(news, prices)
@@ -101,9 +100,7 @@ User clicks "Run Multi-step Research"
 
 ### 2. `get_stock_prices`
 
-- Source priority:
-  1. local proxy `/price`
-  2. direct Yahoo chart fallback
+- Source: direct Yahoo chart API
 - Output: `[{ date, open, close, changePct }]`
 
 ### 3. `link_news_price`
@@ -119,9 +116,8 @@ Used by **Get Stock From Website**:
 
 1. URL alias extraction (Moneycontrol patterns)
 2. `nse-api-ruby` search
-3. local proxy `/resolve_ticker`
-4. direct Yahoo search fallback
-5. regex fallback from page text (`NSE:`, `BSE:` patterns)
+3. direct Yahoo search fallback
+4. regex fallback from page text (`NSE:`, `BSE:` patterns)
 
 Includes fuzzy matching so near-name variations still resolve.
 
@@ -160,14 +156,6 @@ Generate extension config:
 bash scripts/set_gemini_key.sh
 ```
 
-### Step 3: Start local proxy
-
-```bash
-python3 price_proxy.py
-```
-
----
-
 ## 7) Load & Run
 
 ### Load extension
@@ -189,11 +177,6 @@ python3 price_proxy.py
 
 ## 8) API Endpoints Used
 
-### Local
-
-- `GET http://127.0.0.1:8788/price?ticker=...&fromDate=...&toDate=...`
-- `GET http://127.0.0.1:8788/resolve_ticker?query=...`
-
 ### External
 
 - Gemini generate content API
@@ -214,7 +197,6 @@ python3 price_proxy.py
 ### Ticker not detected
 
 - Ensure page is fully loaded before clicking **Get Stock From Website**
-- Ensure proxy is running (`python3 price_proxy.py`)
 - Check debug payload fields:
   - `tickerSource`
   - `resolverCandidate`
@@ -222,7 +204,6 @@ python3 price_proxy.py
 
 ### Price empty or inconsistent
 
-- Keep proxy running (preferred path)
 - Verify ticker uses exchange suffix (`.NS` / `.BO`)
 - Compare with **Test Direct Yahoo** to isolate source issues
 

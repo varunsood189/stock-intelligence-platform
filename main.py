@@ -9,6 +9,23 @@ import yfinance as yf
 from openai import OpenAI
 
 
+def load_env_file(path: str = ".env") -> None:
+    """Load simple KEY=VALUE pairs from a local .env file into os.environ."""
+    if not os.path.exists(path):
+        return
+
+    with open(path, "r", encoding="utf-8") as file:
+        for line in file:
+            raw = line.strip()
+            if not raw or raw.startswith("#") or "=" not in raw:
+                continue
+            key, value = raw.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key and key not in os.environ:
+                os.environ[key] = value
+
+
 # -----------------------------
 # Custom tool functions (>= 3)
 # -----------------------------
@@ -128,7 +145,12 @@ def call_llm(client: OpenAI, full_history: List[Dict[str, Any]], query: str) -> 
 
 
 def run_assignment_flow(company_name: str, ticker: str) -> Dict[str, Any]:
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    load_env_file()
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY is missing. Add it to your environment or .env file.")
+
+    client = OpenAI(api_key=api_key)
     today = datetime.utcnow().date()
     from_date = (today - timedelta(days=30)).strftime("%Y-%m-%d")
     to_date = today.strftime("%Y-%m-%d")
